@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Mike Virata-Stone"]
   spec.email         = ["mjstone@on-site.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Healthcheck for Rails apps.}
+  spec.description   = %q{Health check for Rails apps checking things like active record, redis, and AWS.}
+  spec.homepage      = "https://github.com/on-site/server_health_check-rails"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
