@@ -1,7 +1,7 @@
 module ServerHealthCheckRails
   class HealthCheck
     def initialize(*checks)
-      @check = ServerHealthCheck.new
+      @check = ServerHealthCheck.new(logger: Logger.logger)
       ServerHealthCheckRails.apply_checks(@check, checks)
     end
 
