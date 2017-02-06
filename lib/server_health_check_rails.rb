@@ -34,7 +34,7 @@ module ServerHealthCheckRails
 
     def check_redis!(host: nil, port: 6379)
       add_check "redis" do |server_health_check|
-        server_health_check.redis! host: nil, port: 6379
+        server_health_check.redis! host: host, port: port
       end
     end
 
