@@ -1,7 +1,6 @@
 require "server_health_check"
 require "server_health_check_rails/version"
 require "server_health_check_rails/engine"
-require "server_health_check_rails/logger"
 require "set"
 
 module ServerHealthCheckRails
