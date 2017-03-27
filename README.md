@@ -34,14 +34,20 @@ ServerHealthCheckRails.check "custom_check" do
 end
 ```
 
-And mount the engine in your routes file:
+And indicate the path for the [`server_health_check-rack`](https://github.com/on-site/server_health_check-rack)
+gem to listen against (it defaults to `/health`):
 
 ```ruby
-# config/routes.rb
-Rails.application.routes.draw do
-  mount ServerHealthCheckRails::Engine, at: "/"
-  # Your routes here
-end
+# config/initializers/health_checks.rb
+ServerHealthCheckRails::Config.path = "/check/health"
+```
+
+You can also indicate a custom logger for the [`server_health_check`](https://github.com/on-site/server_health_check)
+gem to utilize (it defaults to not overriding the logger):
+
+```ruby
+# config/initializers/health_checks.rb
+ServerHealthCheckRails::Config.logger = MyCustomLogger.new
 ```
 
 ## Usage
