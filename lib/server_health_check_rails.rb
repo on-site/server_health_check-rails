@@ -1,60 +1,27 @@
-require "server_health_check"
+require "server_health_check/rack"
 require "server_health_check_rails/version"
 require "server_health_check_rails/engine"
-require "set"
 
 module ServerHealthCheckRails
   class << self
-    def all_checks
-      raise ArgumentError, "Please configure server_health_check-rails!" if @checks.nil?
-      @checks.keys
+    def method_missing(method, *args, &block)
+      ServerHealthCheckRack::Checks.send(method, *args, &block)
     end
 
-    def apply_checks(server_health_check, checks)
-      raise ArgumentError, "Please configure server_health_check-rails!" if @checks.nil?
-      checks = Set.new(checks)
+    def respond_to_missing?(method, include_private = false)
+      ServerHealthCheckRack::Checks.respond_to?(method)
+    end
+  end
 
-      @checks.each do |name, check|
-        next unless checks.include?(name)
-        check.call(server_health_check)
+  class Config
+    class << self
+      def method_missing(method, *args, &block)
+        ServerHealthCheckRack::Config.send(method, *args, &block)
       end
-    end
 
-    def check(name, &block)
-      add_check name do |server_health_check|
-        server_health_check.check!(name, &block)
+      def respond_to_missing?(method, include_private = false)
+        ServerHealthCheckRack::Config.respond_to?(method)
       end
-    end
-
-    def check_active_record!
-      add_check "active_record" do |server_health_check|
-        server_health_check.active_record!
-      end
-    end
-
-    def check_redis!(host: nil, port: 6379)
-      add_check "redis" do |server_health_check|
-        server_health_check.redis! host: host, port: port
-      end
-    end
-
-    def check_aws_s3!(bucket = nil)
-      add_check "aws_s3" do |server_health_check|
-        server_health_check.aws_s3! bucket
-      end
-    end
-
-    def check_aws_creds!
-      add_check "aws_creds" do |server_health_check|
-        server_health_check.aws_creds!
-      end
-    end
-
-    private
-
-    def add_check(name, &block)
-      @checks ||= {}
-      @checks[name] = block
     end
   end
 end

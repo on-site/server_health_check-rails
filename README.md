@@ -27,21 +27,27 @@ ServerHealthCheckRails.check_redis!(host: "someredis.host", port: 1234)
 ServerHealthCheckRails.check_aws_s3!("aws-bucket-to-check")
 ServerHealthCheckRails.check_aws_creds!
 ServerHealthCheckRails.check "custom_check" do
-  # Do some work here, then return true if it succeeded for false if not
+  # Do some work here, then return true if it succeeded or false if not
   # (exceptions will be caught by the server_health_check gem and the message
   # will be reported as the status).
   true
 end
 ```
 
-And mount the engine in your routes file:
+And indicate the path for the [`server_health_check-rack`](https://github.com/on-site/server_health_check-rack)
+gem to listen against (it defaults to `/health`):
 
 ```ruby
-# config/routes.rb
-Rails.application.routes.draw do
-  mount ServerHealthCheckRails::Engine, at: "/"
-  # Your routes here
-end
+# config/initializers/health_checks.rb
+ServerHealthCheckRails::Config.path = "/check/health"
+```
+
+You can also indicate a custom logger for the [`server_health_check`](https://github.com/on-site/server_health_check)
+gem to utilize (it defaults to not overriding the logger):
+
+```ruby
+# config/initializers/health_checks.rb
+ServerHealthCheckRails::Config.logger = MyCustomLogger.new
 ```
 
 ## Usage
